@@ -1,0 +1,81 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Setting {
+  key   String @id
+  value String
+}
+
+model StockConfig {
+  id               Int     @id @default(autoincrement())
+  symbol           String  @unique // e.g. "FHG", "SYM", "TMI", "IOU", "TCT"
+  name             String
+  sharesPerBB      Int
+  payoutType       String  // e.g. "FHC", "Drug Pack", "Money", "Beer", etc.
+  payoutAmount     Int     // integer amount of payoutType per increment (money stored as dollars)
+  payoutIntervalDays Int   // 7 or 31 (or 90 if you later add bank-style)
+  active           Boolean @default(true)
+
+  holdings         Holding[]
+}
+
+model Member {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  holdings  Holding[]
+}
+
+model Holding {
+  id        Int      @id @default(autoincrement())
+  shares    Int
+
+  memberId  Int
+  member    Member   @relation(fields: [memberId], references: [id])
+
+  stockId   Int
+  stock     StockConfig @relation(fields: [stockId], references: [id])
+
+  @@unique([memberId, stockId])
+}
+
+model LedgerEntry {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // payoutType groups the ledger: "FHC", "Drug Pack", "Money", etc.
+  payoutType String
+
+  // positive for additions, negative for deductions
+  delta     Int
+
+  category  String  // e.g. "PRIZE", "TRADE", "DONATION", "SALE", "ADJUSTMENT"
+  note      String?
+}
+
+model AuditSnapshot {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  payoutType String
+  actual     Int      // what you physically counted
+  note       String?
+}
+
+model MonthlySnapshot {
+  id          Int      @id @default(autoincrement())
+  month       String   // "2026-03"
+  payoutType  String
+  expected    Int
+  adjustments Int
+  shouldHave  Int
+  createdAt   DateTime @default(now())
+}
