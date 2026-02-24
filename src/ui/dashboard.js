@@ -41,7 +41,7 @@ export function dashboardHTML() {
   <select id="ledgerType"></select>
   <input id="shares" type="text" placeholder="e.g. 2m, 500k"
        oninput="liveFormat(this)" />
-  <input id="ledgerCategory" placeholder="Category" />
+  <select id="ledgerCategory"></select>
   <input id="ledgerNote" placeholder="Note" />
   <button onclick="addLedger()">Add</button>
   <div id="ledger"></div>

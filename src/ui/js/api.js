@@ -7,7 +7,23 @@ async function loadData() {
   const holdings = await fetch('/holdings').then(r => r.json());
   const snapshots = await fetch('/snapshots').then(r => r.json());
     const payoutTypes = [...new Set(stocks.map(s => s.payoutType))];
+const ledgerCategories = [
+  "PRIZE",
+  "TRADE",
+  "SALE",
+  "PURCHASE",
+  "DONATION",
+  "TRANSFER",
+  "ADJUSTMENT",
+  "CORRECTION"
+];
 
+populateDropdown(
+  "ledgerCategory",
+  ledgerCategories.map(c => ({ label: c, value: c })),
+  "label",
+  "value"
+);
 populateDropdown(
   'ledgerType',
   payoutTypes.map(p => ({ value: p, label: p })),
