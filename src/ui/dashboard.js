@@ -30,7 +30,8 @@ export function dashboardHTML() {
   <h2>Holdings</h2>
   <select id="member"></select>
   <select id="stock"></select>
-  <input id="shares" type="text" oninput="liveFormat(this)" />
+    <input id="shares" type="text" placeholder="e.g. 2m, 500k"
+       oninput="liveFormat(this)" />
   <button onclick="updateHolding()">Save</button>
   <div id="holdings"></div>
 </div>
