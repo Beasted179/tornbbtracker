@@ -36,14 +36,15 @@ model Member {
 }
 
 model Holding {
-  id        Int      @id @default(autoincrement())
-  shares    Int
+  id         Int @id @default(autoincrement())
+  shares     Int
+  personalBBs Int @default(0)
 
-  memberId  Int
-  member    Member   @relation(fields: [memberId], references: [id])
+  memberId   Int
+  member     Member @relation(fields: [memberId], references: [id])
 
-  stockId   Int
-  stock     StockConfig @relation(fields: [stockId], references: [id])
+  stockId    Int
+  stock      StockConfig @relation(fields: [stockId], references: [id])
 
   @@unique([memberId, stockId])
 }

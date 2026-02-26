@@ -10,9 +10,9 @@ router.get("/", async (req, res) => {
   });
 
   const formatted = holdings.map(h => {
-    const totalBBs = Math.floor(h.shares / h.stock.sharesPerBB);
-    const incrementLevel = getIncrementLevel(totalBBs);
-
+  const totalBBs = Math.floor(h.shares / h.stock.sharesPerBB);
+  const effectiveBBs = Math.max(0, totalBBs - h.personalBBs);
+  const incrementLevel = getIncrementLevel(effectiveBBs);
     return {
       id: h.id,
       member: h.member.name,
@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
       shares: h.shares,
       totalBBs,
       incrementLevel,
+      personalBBs: h.personalBBs,
     };
   });
 
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { member, symbol, shares } = req.body;
+  const { member, symbol, shares, personalBBs } = req.body;
 
   const memberRecord = await prisma.member.findUnique({ where: { name: member }});
   const stockRecord = await prisma.stockConfig.findUnique({ where: { symbol }});
@@ -35,20 +36,24 @@ router.post("/", async (req, res) => {
   if (!memberRecord || !stockRecord)
     return res.status(404).json({ error: "Invalid member or stock" });
 
-  await prisma.holding.upsert({
-    where: {
-      memberId_stockId: {
-        memberId: memberRecord.id,
-        stockId: stockRecord.id
-      }
-    },
-    update: { shares },
-    create: {
+await prisma.holding.upsert({
+  where: {
+    memberId_stockId: {
       memberId: memberRecord.id,
-      stockId: stockRecord.id,
-      shares
+      stockId: stockRecord.id
     }
-  });
+  },
+  update: {
+    shares,
+    personalBBs: Number(personalBBs || 0)
+  },
+  create: {
+    memberId: memberRecord.id,
+    stockId: stockRecord.id,
+    shares,
+    personalBBs: Number(personalBBs || 0)
+  }
+});
 
   res.json({ success: true });
 });

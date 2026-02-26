@@ -23,8 +23,9 @@ export async function calculateProjections() {
   for (const h of holdings) {
     const { stock, shares } = h;
 
-    const totalBBs = Math.floor(shares / stock.sharesPerBB);
-    const incrementLevel = getIncrementLevel(totalBBs);
+   const totalBBs = Math.floor(shares / stock.sharesPerBB);
+   const effectiveBBs = Math.max(0, totalBBs - h.personalBBs);
+   const incrementLevel = getIncrementLevel(effectiveBBs);
     if (incrementLevel === 0) continue;
 
     const daysSinceStart =

@@ -27,16 +27,26 @@ function renderProjections(data, audits) {
 }
 
 function renderHoldings(data) {
-  let html = '<table><tr><th>Member</th><th>Stock</th><th>Shares</th><th>BBs</th><th>Level</th></tr>';
+  let html = '<table><tr>' +
+    '<th>Member</th>' +
+    '<th>Stock</th>' +
+    '<th>Shares</th>' +
+    '<th>Total BBs</th>' +
+    '<th>Personal BBs</th>' +
+    '<th>Level</th>' +
+    '</tr>';
+
   data.forEach(h => {
     html += '<tr>' +
       '<td>' + h.member + '</td>' +
       '<td>' + h.stock + '</td>' +
       '<td>' + formatNumber(h.shares) + '</td>' +
       '<td>' + h.totalBBs + '</td>' +
+      '<td>' + (h.personalBBs || 0) + '</td>' +
       '<td>' + h.incrementLevel + '</td>' +
       '</tr>';
   });
+
   html += '</table>';
   document.getElementById('holdings').innerHTML = html;
 }

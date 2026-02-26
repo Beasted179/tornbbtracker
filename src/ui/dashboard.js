@@ -30,9 +30,19 @@ export function dashboardHTML() {
   <h2>Holdings</h2>
   <select id="member"></select>
   <select id="stock"></select>
-    <input id="shares" type="text" placeholder="e.g. 2m, 500k"
-       oninput="liveFormat(this)" />
+
+  <input id="shares"
+         type="text"
+         placeholder="Shares (e.g. 2m, 500k)"
+         oninput="liveFormat(this)" />
+
+  <input id="personalBBs"
+         type="number"
+         min="0"
+         placeholder="Personal BBs (optional)" />
+
   <button onclick="updateHolding()">Save</button>
+
   <div id="holdings"></div>
 </div>
 

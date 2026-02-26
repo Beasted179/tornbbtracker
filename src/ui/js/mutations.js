@@ -1,5 +1,6 @@
 async function updateHolding() {
   const shares = parseShorthand(document.getElementById('shares').value);
+  const personalBBs = Number(document.getElementById('personalBBs').value || 0);
 
   await fetch('/holdings', {
     method: 'POST',
@@ -7,7 +8,8 @@ async function updateHolding() {
     body: JSON.stringify({
       member: document.getElementById('member').value,
       symbol: document.getElementById('stock').value,
-      shares
+      shares,
+      personalBBs
     })
   });
 
