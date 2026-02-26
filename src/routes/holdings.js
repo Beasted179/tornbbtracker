@@ -58,4 +58,14 @@ await prisma.holding.upsert({
   res.json({ success: true });
 });
 
+router.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  await prisma.holding.delete({
+    where: { id }
+  });
+
+  res.json({ success: true });
+});
+
 export default router;

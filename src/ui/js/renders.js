@@ -34,6 +34,7 @@ function renderHoldings(data) {
     '<th>Total BBs</th>' +
     '<th>Personal BBs</th>' +
     '<th>Level</th>' +
+    '<th>Action</th>' +
     '</tr>';
 
   data.forEach(h => {
@@ -44,6 +45,7 @@ function renderHoldings(data) {
       '<td>' + h.totalBBs + '</td>' +
       '<td>' + (h.personalBBs || 0) + '</td>' +
       '<td>' + h.incrementLevel + '</td>' +
+      '<td><button onclick="deleteHolding(' + h.id + ')">Delete</button></td>' +
       '</tr>';
   });
 

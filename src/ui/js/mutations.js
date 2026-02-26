@@ -59,6 +59,14 @@ async function deleteMember(id) {
   loadData();
 }
 
+async function deleteHolding(id) {
+  await fetch('/holdings/' + id, {
+    method: 'DELETE'
+  });
+
+  loadData();
+}
+
 async function transferShares() {
   const shares = parseShorthand(document.getElementById('transferAmount').value);
 
