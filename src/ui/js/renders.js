@@ -32,7 +32,7 @@ function renderHoldings(data) {
     '<th>Stock</th>' +
     '<th>Shares</th>' +
     '<th>Total BBs</th>' +
-    '<th>Personal BBs</th>' +
+    '<th>Personal Shares</th>' +
     '<th>Level</th>' +
     '<th>Action</th>' +
     '</tr>';
