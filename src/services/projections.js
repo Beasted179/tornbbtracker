@@ -3,6 +3,8 @@ import { getIncrementLevel } from "../utils/increment.js";
 
 export async function calculateProjections() {
   const now = new Date();
+
+
   const trackingStartDate = new Date(Date.UTC(
     now.getUTCFullYear(),
     now.getUTCMonth(),
@@ -14,27 +16,40 @@ export async function calculateProjections() {
     include: { stock: true }
   });
 
+  const ledger = await prisma.ledgerEntry.findMany();
+
   const result = {
-    stocks: {},
     payoutTypes: {},
     total: {}
   };
 
   for (const h of holdings) {
-    const { stock, shares } = h;
+    const shares = h.shares || 0;
+    const personalBBs = h.personalBBs ?? 0;
+    const stock = h.stock;
 
-   const totalBBs = Math.floor(shares / stock.sharesPerBB);
-   const effectiveBBs = Math.max(0, totalBBs - h.personalBBs);
-   const incrementLevel = getIncrementLevel(effectiveBBs);
-    if (incrementLevel === 0) continue;
+    if (!stock) continue;
+
+
+    const totalBBs = Math.floor(shares / stock.sharesPerBB);
+
+
+    const effectiveBBs = Math.max(0, totalBBs - personalBBs);
+
+
+    const incrementLevel = getIncrementLevel(effectiveBBs);
+
+    if (incrementLevel <= 0) continue;
+
 
     const daysSinceStart =
       (now - trackingStartDate) / (1000 * 60 * 60 * 24);
 
-    const cyclesPassed = Math.max(
-      0,
-      Math.floor(daysSinceStart / stock.payoutIntervalDays)
+    const cyclesPassed = Math.floor(
+      daysSinceStart / stock.payoutIntervalDays
     );
+
+    if (cyclesPassed <= 0) continue;
 
     const expected =
       incrementLevel * stock.payoutAmount * cyclesPassed;
@@ -43,7 +58,6 @@ export async function calculateProjections() {
       (result.payoutTypes[stock.payoutType] || 0) + expected;
   }
 
-  const ledger = await prisma.ledgerEntry.findMany();
 
   const adjustments = {};
   for (const entry of ledger) {
@@ -53,6 +67,7 @@ export async function calculateProjections() {
 
   for (const type in result.payoutTypes) {
     const expected = result.payoutTypes[type];
+
     result.total[type] = {
       expected,
       adjustments: adjustments[type] || 0,
