@@ -36,10 +36,10 @@ export function dashboardHTML() {
          placeholder="Shares (e.g. 2m, 500k)"
          oninput="liveFormat(this)" />
 
-  <input id="personalBBs"
-         type="number"
-         min="0"
-         placeholder="Personal BBs (optional)" />
+<input id="personalBBs"
+       type="text"
+       placeholder="Personal BBs (e.g. 1)"
+       oninput="liveFormat(this)" />
 
   <button onclick="updateHolding()">Save</button>
 
