@@ -43,7 +43,7 @@ function renderHoldings(data) {
       '<td>' + h.stock + '</td>' +
       '<td>' + formatNumber(h.shares) + '</td>' +
       '<td>' + h.totalBBs + '</td>' +
-      '<td>' + (h.personalShares || 0) + '</td>' +
+      '<td>' + formatNumber(h.personalShares || 0) + '</td>' +
       '<td>' + h.incrementLevel + '</td>' +
       '<td><button onclick="deleteHolding(' + h.id + ')">Delete</button></td>' +
       '</tr>';
