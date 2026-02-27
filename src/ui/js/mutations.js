@@ -17,7 +17,7 @@ const personalShares = parseShorthand(
       member: document.getElementById('member').value,
       symbol: document.getElementById('stock').value,
       shares,
-      personalBBs
+      personalShares
     })
   });
 
