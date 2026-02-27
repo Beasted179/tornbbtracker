@@ -31,14 +31,16 @@ export async function calculateProjections() {
     if (!stock) continue;
 
 
-    const totalBBs = Math.floor(shares / stock.sharesPerBB);
 
+const personalShares = h.personalShares || 0;
 
-    const effectiveBBs = Math.max(0, totalBBs - personalBBs);
+const effectiveShares = Math.max(0, shares - personalShares);
 
+const effectiveBBs = Math.floor(
+  effectiveShares / stock.sharesPerBB
+);
 
-    const incrementLevel = getIncrementLevel(effectiveBBs);
-
+const incrementLevel = getIncrementLevel(effectiveBBs);
     if (incrementLevel <= 0) continue;
 
 

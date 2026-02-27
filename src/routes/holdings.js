@@ -11,7 +11,8 @@ router.get("/", async (req, res) => {
 
   const formatted = holdings.map(h => {
   const totalBBs = Math.floor(h.shares / h.stock.sharesPerBB);
-  const effectiveBBs = Math.max(0, totalBBs - h.personalBBs);
+  const effectiveShares = Math.max(0, h.shares - (h.personalShares || 0));
+const effectiveBBs = Math.floor(effectiveShares / h.stock.sharesPerBB);
   const incrementLevel = getIncrementLevel(effectiveBBs);
     return {
       id: h.id,
@@ -20,7 +21,7 @@ router.get("/", async (req, res) => {
       shares: h.shares,
       totalBBs,
       incrementLevel,
-      personalBBs: h.personalBBs,
+      personalShares: h.personalShares,
     };
   });
 
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { member, symbol, shares, personalBBs } = req.body;
+  const { member, symbol, shares, personalShares } = req.body;
 
   const memberRecord = await prisma.member.findUnique({ where: { name: member }});
   const stockRecord = await prisma.stockConfig.findUnique({ where: { symbol }});
@@ -45,13 +46,13 @@ await prisma.holding.upsert({
   },
   update: {
     shares,
-    personalBBs: Number(personalBBs || 0)
+    personalShares: Number(personalShares || 0)
   },
   create: {
     memberId: memberRecord.id,
     stockId: stockRecord.id,
     shares,
-    personalBBs: Number(personalBBs || 0)
+    personalShares: Number(personalShares || 0)
   }
 });
 

@@ -1,13 +1,13 @@
 async function updateHolding() {
   const shares = parseShorthand(document.getElementById('shares').value);
-const personalBBs = parseShorthand(
-  document.getElementById('personalBBs').value
+const personalShares = parseShorthand(
+  document.getElementById('personalShares').value
 ) || 0;
   console.log("Submitting holding:", {
     member: document.getElementById('member').value,
     symbol: document.getElementById('stock').value,
     shares,
-    personalBBs
+    personalShares
   });
   
   await fetch('/holdings', {

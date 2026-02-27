@@ -38,7 +38,7 @@ model Member {
 model Holding {
   id         Int @id @default(autoincrement())
   shares     Int
-  personalBBs Int @default(0)
+  personalShares Int @default(0)
 
   memberId   Int
   member     Member @relation(fields: [memberId], references: [id])
