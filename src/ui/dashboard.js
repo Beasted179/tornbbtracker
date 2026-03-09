@@ -31,15 +31,15 @@ export function dashboardHTML() {
   <select id="member"></select>
   <select id="stock"></select>
 
-  <input id="shares"
+  <input id="holdingShares"
          type="text"
          placeholder="Shares (e.g. 2m, 500k)"
          oninput="liveFormat(this)" />
 
-<input id="personalShares"
-       type="text"
-       placeholder="Personal Shares (e.g. 1)"
-       oninput="liveFormat(this)" />
+  <input id="personalShares"
+         type="text"
+         placeholder="Personal Shares (e.g. 1m)"
+         oninput="liveFormat(this)" />
 
   <button onclick="updateHolding()">Save</button>
 
@@ -49,11 +49,17 @@ export function dashboardHTML() {
 <div class="panel">
   <h2>Ledger</h2>
   <select id="ledgerType"></select>
-  <input id="shares" type="text" placeholder="e.g. 2m, 500k"
-       oninput="liveFormat(this)" />
+
+  <input id="ledgerDelta"
+         type="text"
+         placeholder="Amount (e.g. 2m, 500k)"
+         oninput="liveFormat(this)" />
+
   <select id="ledgerCategory"></select>
   <input id="ledgerNote" placeholder="Note" />
+
   <button onclick="addLedger()">Add</button>
+
   <div id="ledger"></div>
 </div>
 
@@ -62,19 +68,30 @@ export function dashboardHTML() {
   <select id="transferFrom"></select>
   <select id="transferTo"></select>
   <select id="transferStock"></select>
-  <input id="shares" type="text" placeholder="e.g. 2m, 500k"
-       oninput="liveFormat(this)" />
+
+  <input id="transferAmount"
+         type="text"
+         placeholder="Shares (e.g. 2m, 500k)"
+         oninput="liveFormat(this)" />
+
   <span id="sharesPreview"></span>
+
   <button onclick="transferShares()">Transfer</button>
 </div>
 
 <div class="panel">
   <h2>Audit Snapshots</h2>
- <select id="auditType"></select>
- <input id="shares" type="text" placeholder="e.g. 2m, 500k"
-       oninput="liveFormat(this)" />
+  <select id="auditType"></select>
+
+  <input id="auditActual"
+         type="text"
+         placeholder="Actual amount (e.g. 2m, 500k)"
+         oninput="liveFormat(this)" />
+
   <input id="auditNote" placeholder="Note" />
+
   <button onclick="addAudit()">Add</button>
+
   <div id="audits"></div>
 </div>
 

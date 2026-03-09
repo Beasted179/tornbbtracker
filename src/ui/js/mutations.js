@@ -1,15 +1,19 @@
 async function updateHolding() {
-  const shares = parseShorthand(document.getElementById('shares').value);
-const personalShares = parseShorthand(
-  document.getElementById('personalShares').value
-) || 0;
+  const shares = parseShorthand(
+    document.getElementById('holdingShares').value || "0"
+  );
+
+  const personalShares = parseShorthand(
+    document.getElementById('personalShares').value || "0"
+  );
+
   console.log("Submitting holding:", {
     member: document.getElementById('member').value,
     symbol: document.getElementById('stock').value,
     shares,
     personalShares
   });
-  
+
   await fetch('/holdings', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -21,11 +25,17 @@ const personalShares = parseShorthand(
     })
   });
 
+  // auto clear inputs
+  document.getElementById('holdingShares').value = "";
+  document.getElementById('personalShares').value = "";
+
   loadData();
 }
 
 async function addLedger() {
-  const delta = parseShorthand(document.getElementById('ledgerDelta').value);
+  const delta = parseShorthand(
+    document.getElementById('ledgerDelta').value || "0"
+  );
 
   await fetch('/ledger', {
     method: 'POST',
@@ -38,11 +48,17 @@ async function addLedger() {
     })
   });
 
+  // auto clear inputs
+  document.getElementById('ledgerDelta').value = "";
+  document.getElementById('ledgerNote').value = "";
+
   loadData();
 }
 
 async function addAudit() {
-  const actual = parseShorthand(document.getElementById('auditActual').value);
+  const actual = parseShorthand(
+    document.getElementById('auditActual').value || "0"
+  );
 
   await fetch('/audits', {
     method: 'POST',
@@ -53,6 +69,10 @@ async function addAudit() {
       note: document.getElementById('auditNote').value
     })
   });
+
+  // auto clear inputs
+  document.getElementById('auditActual').value = "";
+  document.getElementById('auditNote').value = "";
 
   loadData();
 }
@@ -76,7 +96,9 @@ async function deleteHolding(id) {
 }
 
 async function transferShares() {
-  const shares = parseShorthand(document.getElementById('transferAmount').value);
+  const shares = parseShorthand(
+    document.getElementById('transferAmount').value || "0"
+  );
 
   await fetch('/transfers', {
     method: 'POST',
@@ -88,6 +110,9 @@ async function transferShares() {
       shares
     })
   });
+
+  // auto clear input
+  document.getElementById('transferAmount').value = "";
 
   loadData();
 }
